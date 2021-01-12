@@ -198,7 +198,10 @@ class _VocXmlExtractor(_VocExtractor):
             attributes_elem = object_elem.find('attributes')
             if attributes_elem is not None:
                 for attr_elem in attributes_elem.iter('attribute'):
-                    attributes[attr_elem.find('name').text] = \
+                    if attr_elem.find('name') is not None:
+                        print("elemenn---->",attr_elem.find('name').text)
+                        print("elemenn value---->",attr_elem.find('value'))
+                        attributes[attr_elem.find('name').text] = \
                         attr_elem.find('value').text
 
             if self._task is VocTask.person_layout and not has_parts:
@@ -218,7 +221,10 @@ class _VocXmlExtractor(_VocExtractor):
         xmax = float(bbox_elem.find('xmax').text)
         ymin = float(bbox_elem.find('ymin').text)
         ymax = float(bbox_elem.find('ymax').text)
-        return [xmin, ymin, xmax - xmin, ymax - ymin]
+        xaxis = float(bbox_elem.find('x-axis').text)
+        yaxis = float(bbox_elem.find('y-axis').text)
+        zaxis = float(bbox_elem.find('z-axis').text) 
+        return [xmin, ymin, xmax - xmin, ymax - ymin, xaxis, yaxis, zaxis]
 
 class VocDetectionExtractor(_VocXmlExtractor):
     def __init__(self, path):
